@@ -1,0 +1,660 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>DeBoa — Ele conhece seu momento. Por isso sabe a hora.</title>
+<meta name="description" content="O DeBoa lê sua renda, seus gastos, seus cartões, suas metas e seus hábitos — e aparece exatamente quando você está prestes a comprar. Entre na lista de espera do primeiro grupo de teste.">
+<meta name="theme-color" content="#faf9f7">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="DeBoa">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:title" content="DeBoa — Ele conhece seu momento. Por isso sabe a hora.">
+<meta property="og:description" content="Um agente que lê sua vida financeira inteira e aparece antes do clique. Entre na lista de espera.">
+<meta property="og:image" content="og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="DeBoa — Ele conhece seu momento. Por isso sabe a hora.">
+<meta name="twitter:description" content="Um agente que lê sua vida financeira inteira e aparece antes do clique. Entre na lista de espera.">
+<meta name="twitter:image" content="og-image.png">
+
+<link rel="icon" href="favicon.ico" type="image/x-icon">
+<link rel="icon" href="icon-192.png" type="image/png" sizes="192x192">
+<link rel="apple-touch-icon" href="apple-touch-icon.png" sizes="180x180">
+<link rel="manifest" href="manifest.json">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap">
+
+<style>
+  /* Tokens mirrored 1:1 from the app's src/styles.css. */
+  :root {
+    --r-2xl: 1.5rem;
+    --r-3xl: 1.75rem;
+    --background: oklch(0.985 0.004 85);
+    --foreground: oklch(0.19 0.012 60);
+    --surface: oklch(1 0 0);
+    --primary: oklch(0.19 0.012 60);
+    --primary-foreground: oklch(0.99 0.003 85);
+    --muted: oklch(0.96 0.005 85);
+    --muted-foreground: oklch(0.53 0.012 70);
+    --accent: oklch(0.58 0.16 34);
+    --accent-foreground: oklch(0.99 0.003 85);
+    --destructive: oklch(0.577 0.245 27.325);
+    --border: oklch(0.92 0.006 80);
+    --font-sans: "Geist", ui-sans-serif, system-ui, -apple-system, "SF Pro Text", sans-serif;
+    --shadow-soft: 0 1px 2px oklch(0.2 0.02 60 / 4%), 0 8px 24px -12px oklch(0.2 0.02 60 / 10%);
+    --shadow-lift: 0 2px 6px oklch(0.2 0.02 60 / 5%), 0 24px 60px -24px oklch(0.2 0.02 60 / 18%);
+  }
+
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0; background: var(--background); color: var(--foreground);
+    font-family: var(--font-sans); -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3, p, ul, ol, dl, dd, dt { margin: 0; }
+  ul, ol { padding: 0; list-style: none; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+
+  .wrap { max-width: 64rem; margin: 0 auto; padding: 1.5rem 1.5rem 6rem; }
+  @media (min-width: 640px) { .wrap { padding-left: 2rem; padding-right: 2rem; } }
+
+  .wordmark { font-weight: 600; letter-spacing: -0.04em; }
+  .wordmark i { font-style: normal; color: var(--accent); }
+
+  nav.top { display: flex; align-items: center; justify-content: space-between; padding-top: 0.5rem; }
+  .nav-link { font-size: 13px; font-weight: 500; color: var(--muted-foreground); text-decoration: none; text-underline-offset: 4px; transition: color .15s ease; }
+  .nav-link:hover { color: var(--foreground); }
+
+  .hero { display: grid; gap: 3rem; padding-top: 3.5rem; }
+  @media (min-width: 640px) { .hero { padding-top: 5rem; } }
+  @media (min-width: 1024px) { .hero { grid-template-columns: 1.02fr 0.98fr; align-items: center; gap: 3.5rem; } }
+  .rise { opacity: 0; animation: rise .6s cubic-bezier(.16,1,.3,1) both; }
+  .rise.d1 { animation-delay: .12s; }
+
+  .pill {
+    display: inline-flex; align-items: center; border-radius: 999px; padding: 0.4rem 0.85rem;
+    font-size: 11px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase;
+    border: 1px solid oklch(0.92 0.006 80 / 70%); background: var(--muted); color: var(--muted-foreground);
+  }
+  .pill.accent { background: oklch(0.58 0.16 34 / 10%); color: var(--accent); border-color: transparent; }
+
+  h1 { margin-top: 1.5rem; max-width: 16ch; font-size: 36px; font-weight: 600; line-height: 1.04; letter-spacing: -0.04em; text-wrap: balance; }
+  @media (min-width: 640px) { h1 { font-size: 52px; } }
+  .lede { margin-top: 1.25rem; max-width: 46ch; font-size: 16px; line-height: 1.65; color: var(--muted-foreground); }
+
+  .trust-row { margin-top: 1.5rem; display: flex; flex-wrap: wrap; gap: 0.6rem 1.25rem; max-width: 28rem; }
+  .trust-item { display: flex; align-items: center; gap: 0.4rem; font-size: 12px; color: var(--muted-foreground); }
+
+  form.waitlist { max-width: 28rem; }
+  .field-row { display: flex; flex-direction: column; gap: 0.5rem; }
+  @media (min-width: 640px) { .field-row { flex-direction: row; } }
+  .input {
+    width: 100%; min-height: 3.25rem; border-radius: var(--r-2xl); border: 1px solid var(--border);
+    background: var(--surface); padding: 0 1rem; font-family: inherit; font-size: 16px;
+    letter-spacing: -0.01em; color: var(--foreground); outline: none; transition: border-color .15s ease;
+  }
+  .input::placeholder { color: oklch(0.53 0.012 70 / 60%); }
+  .input:focus { border-color: oklch(0.58 0.16 34 / 60%); }
+  .input.is-error { border-color: var(--destructive); }
+  .input.on-dark { border-color: transparent; background: oklch(0.99 0.003 85 / 10%); color: var(--primary-foreground); }
+  .input.on-dark::placeholder { color: oklch(0.99 0.003 85 / 45%); }
+  .input.on-dark:focus { border-color: var(--accent); }
+
+  .btn {
+    display: inline-flex; flex-shrink: 0; align-items: center; justify-content: center; gap: 0.4rem;
+    min-height: 3.25rem; border-radius: var(--r-2xl); border: none; padding: 0 1.4rem;
+    font-family: inherit; font-size: 15px; font-weight: 500; letter-spacing: -0.01em;
+    cursor: pointer; transition: transform .12s ease; white-space: nowrap; text-decoration: none;
+  }
+  .btn:active { transform: scale(.985); }
+  .btn:disabled { opacity: .4; cursor: not-allowed; }
+  .btn-accent { background: var(--accent); color: var(--accent-foreground); box-shadow: var(--shadow-lift); }
+  .btn-primary { background: var(--primary); color: var(--primary-foreground); width: 100%; }
+  .btn-quiet { width: 100%; min-height: 2.75rem; font-size: 13px; border: 1px solid var(--border); background: var(--surface); color: var(--foreground); }
+  .btn-quiet.on-dark { border-color: transparent; background: oklch(0.99 0.003 85 / 10%); color: var(--primary-foreground); }
+
+  .hint { margin-top: 0.65rem; padding: 0 0.25rem; font-size: 12px; line-height: 1.5; color: var(--muted-foreground); }
+  .hint.error { color: var(--destructive); }
+  .hint.on-dark { color: oklch(0.99 0.003 85 / 55%); }
+
+  .success-stack { display: flex; flex-direction: column; gap: 0.6rem; }
+  .success-row {
+    display: flex; align-items: center; gap: 0.75rem; border-radius: var(--r-2xl);
+    border: 1px solid oklch(0.58 0.16 34 / 30%); background: oklch(0.58 0.16 34 / 8%); padding: 1rem;
+  }
+  .success-row.on-dark { border-color: transparent; background: oklch(0.99 0.003 85 / 10%); }
+  .success-row .check { display: grid; place-items: center; flex-shrink: 0; width: 2.25rem; height: 2.25rem; border-radius: 999px; background: var(--accent); color: var(--accent-foreground); }
+  .success-row p { font-size: 14px; font-weight: 500; letter-spacing: -0.01em; line-height: 1.35; }
+
+  .phone { margin: 0 auto; width: 100%; max-width: 300px; }
+  .phone-frame { border-radius: 2.6rem; border: 1px solid var(--border); background: var(--surface); padding: 0.625rem; box-shadow: var(--shadow-lift); }
+  .phone-screen { border-radius: 2rem; background: var(--background); padding: 1.5rem 1.25rem 1.75rem; }
+  .phone-top { display: flex; align-items: center; justify-content: space-between; }
+  .analyzing { display: flex; align-items: center; gap: 0.375rem; font-size: 10px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted-foreground); }
+  .orb { width: 6px; height: 6px; border-radius: 999px; background: var(--accent); animation: pulse 1.8s ease-in-out infinite; }
+  .phone-eyebrow { font-size: 11px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted-foreground); }
+  .phone-product { margin-top: 0.75rem; font-size: 16px; font-weight: 500; letter-spacing: -0.01em; }
+  .phone-price { margin-top: 0.125rem; font-size: 28px; font-weight: 600; letter-spacing: -0.035em; }
+  .phone-bubble { margin-top: 1.5rem; border-radius: 1.4rem; background: var(--primary); color: var(--primary-foreground); padding: 1rem; }
+  .phone-bubble .who { font-size: 11px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; opacity: .6; }
+  .phone-bubble .say { margin-top: 0.5rem; font-size: 14px; line-height: 1.45; letter-spacing: -0.01em; }
+  .phone-actions { margin-top: 0.75rem; display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+  .phone-actions span { display: grid; place-items: center; min-height: 2.5rem; border-radius: 999px; font-size: 12px; font-weight: 500; }
+  .phone-actions .yes { background: var(--accent); color: var(--accent-foreground); }
+  .phone-actions .no { border: 1px solid var(--border); color: var(--muted-foreground); }
+  .phone-caption { margin-top: 1rem; text-align: center; font-size: 12px; color: var(--muted-foreground); }
+
+  section.block { margin-top: 7rem; }
+  @media (min-width: 640px) { section.block { margin-top: 9rem; } }
+  .eyebrow { display: flex; align-items: center; gap: 0.625rem; font-size: 12px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted-foreground); }
+  .eyebrow::before { content: ""; width: 6px; height: 6px; border-radius: 999px; background: var(--accent); flex-shrink: 0; }
+  h2 { margin-top: 1rem; max-width: 20ch; font-size: 27px; font-weight: 500; line-height: 1.18; letter-spacing: -0.03em; text-wrap: balance; }
+  @media (min-width: 640px) { h2 { font-size: 34px; } }
+  .prose { margin-top: 1.25rem; max-width: 62ch; font-size: 16px; line-height: 1.7; color: var(--muted-foreground); }
+
+  .card { border-radius: var(--r-3xl); border: 1px solid oklch(0.92 0.006 80 / 70%); background: var(--surface); padding: 1.25rem; box-shadow: var(--shadow-soft); }
+  .card.lift { box-shadow: var(--shadow-lift); }
+
+  .mandala-grid { margin-top: 3rem; display: grid; gap: 3rem; align-items: center; }
+  @media (min-width: 1024px) { .mandala-grid { grid-template-columns: minmax(0,0.9fr) minmax(0,1.1fr); gap: 4rem; } }
+  .mandala { margin: 0 auto; width: 100%; max-width: 380px; }
+  .mandala svg { width: 100%; height: auto; display: block; }
+  .legend { display: grid; gap: 1.25rem 2rem; }
+  @media (min-width: 640px) { .legend { grid-template-columns: 1fr 1fr; gap: 1.5rem 2rem; } }
+  .legend dt { display: flex; align-items: center; gap: 0.5rem; font-size: 15px; font-weight: 500; letter-spacing: -0.01em; }
+  .legend dt::before { content: ""; width: 6px; height: 6px; border-radius: 999px; background: var(--accent); flex-shrink: 0; }
+  .legend dd { margin-top: 0.375rem; padding-left: 0.875rem; font-size: 14px; line-height: 1.6; color: var(--muted-foreground); }
+
+  .proof-grid { margin-top: 2rem; display: grid; gap: 1rem; }
+  @media (min-width: 640px) { .proof-grid { grid-template-columns: 1fr 1fr; } }
+  .proof-head { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; }
+  .proof-head .impact { font-size: 12px; color: var(--muted-foreground); }
+  .proof-rows { margin-top: 1.25rem; padding-bottom: 1.25rem; border-bottom: 1px solid var(--border); display: flex; flex-direction: column; gap: 0.5rem; font-size: 13px; }
+  .proof-rows div { display: flex; align-items: baseline; justify-content: space-between; gap: 0.75rem; }
+  .proof-rows dt { color: var(--muted-foreground); }
+  .proof-rows dd { font-weight: 500; letter-spacing: -0.01em; font-variant-numeric: tabular-nums; }
+  .proof-verdict { margin-top: 1.25rem; font-size: 19px; font-weight: 600; line-height: 1.3; letter-spacing: -0.02em; }
+  .proof-advice { margin-top: 0.5rem; font-size: 14px; line-height: 1.6; color: var(--muted-foreground); }
+  .card.go { border-color: oklch(0.58 0.16 34 / 30%); background: oklch(0.58 0.16 34 / 6%); }
+  .footnote { margin-top: 1rem; font-size: 12px; line-height: 1.5; color: var(--muted-foreground); }
+
+  .steps { margin-top: 2rem; display: grid; gap: 1.75rem 2rem; }
+  @media (min-width: 640px) { .steps { grid-template-columns: 1fr 1fr; } }
+  .steps li { border-top: 1px solid var(--border); padding-top: 1rem; }
+  .steps .num { font-size: 12px; font-weight: 500; letter-spacing: 0.08em; color: var(--accent); font-variant-numeric: tabular-nums; }
+  .steps .t { margin-top: 0.5rem; font-size: 16px; font-weight: 500; letter-spacing: -0.01em; }
+  .steps .d { margin-top: 0.375rem; font-size: 14px; line-height: 1.6; color: var(--muted-foreground); }
+
+  .demo-row { display: grid; gap: 0.75rem; }
+  @media (min-width: 640px) { .demo-row { grid-template-columns: 1fr 10rem; } }
+  .result { margin-top: 1.5rem; border-radius: 1.4rem; background: var(--primary); color: var(--primary-foreground); padding: 1.5rem; opacity: 0; animation: rise .45s cubic-bezier(.16,1,.3,1) both; }
+  .result-head { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; font-size: 11px; letter-spacing: .1em; text-transform: uppercase; opacity: .6; }
+  .result-head .imp { text-transform: none; letter-spacing: 0; font-size: 12px; }
+  .result h3 { margin-top: 1rem; font-size: 22px; font-weight: 600; line-height: 1.3; letter-spacing: -0.025em; }
+  .result .msg { margin-top: 0.75rem; font-size: 14px; line-height: 1.65; opacity: .75; }
+  .result .adv { margin-top: 0.75rem; font-size: 15px; font-weight: 500; letter-spacing: -0.01em; }
+  .result-nudge { margin-top: 1.5rem; border-radius: var(--r-2xl); background: oklch(0.99 0.003 85 / 8%); padding: 1.25rem; }
+  .result-nudge p { font-size: 13px; line-height: 1.6; opacity: .8; }
+  .result-nudge strong { font-weight: 500; opacity: 1; }
+
+  .not-grid { display: grid; gap: 2.5rem; }
+  @media (min-width: 1024px) { .not-grid { grid-template-columns: 1fr 1fr; gap: 4rem; } }
+  .not-list { margin-top: 1.5rem; display: flex; flex-direction: column; gap: 0.875rem; }
+  .not-list li { display: flex; align-items: center; gap: 0.75rem; font-size: 15px; color: var(--muted-foreground); }
+  .not-list li::before { content: ""; width: 1rem; height: 1px; background: var(--border); flex-shrink: 0; }
+  .quote-card { display: flex; flex-direction: column; justify-content: center; background: var(--primary); color: var(--primary-foreground); padding: 1.75rem; }
+  .quote-card .big { font-size: 26px; font-weight: 500; line-height: 1.25; letter-spacing: -0.025em; }
+  .quote-card .big i { font-style: normal; color: var(--accent); }
+  .quote-card .small { margin-top: 1.25rem; font-size: 14px; line-height: 1.65; opacity: .7; }
+
+  .faq { margin-top: 1.5rem; max-width: 62ch; }
+  .faq details { border-bottom: 1px solid var(--border); }
+  .faq summary { cursor: pointer; list-style: none; display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1.25rem 0; font-size: 15px; font-weight: 500; letter-spacing: -0.01em; }
+  .faq summary::-webkit-details-marker { display: none; }
+  .faq summary svg { flex-shrink: 0; color: var(--muted-foreground); transition: transform .2s ease; }
+  .faq details[open] summary svg { transform: rotate(180deg); }
+  .faq .answer { padding-bottom: 1.25rem; font-size: 14px; line-height: 1.65; color: var(--muted-foreground); }
+
+  .final { margin-top: 7rem; }
+  @media (min-width: 640px) { .final { margin-top: 9rem; } }
+  .final .card { padding: 2rem; text-align: center; }
+  @media (min-width: 640px) { .final .card { padding: 3rem; } }
+  .final .big { margin: 0 auto; max-width: 20ch; font-size: 28px; font-weight: 600; line-height: 1.15; letter-spacing: -0.03em; text-wrap: balance; }
+  @media (min-width: 640px) { .final .big { font-size: 34px; } }
+  .final .big i { font-style: normal; color: var(--accent); }
+  .final .sub { margin: 1rem auto 0; max-width: 46ch; font-size: 15px; line-height: 1.6; color: var(--muted-foreground); }
+  .final .form-slot { margin: 2rem auto 0; max-width: 28rem; text-align: left; }
+
+  footer.site { margin-top: 5rem; display: flex; flex-direction: column; align-items: center; gap: 0.75rem; text-align: center; }
+  footer.site .wordmark { font-size: 15px; color: var(--muted-foreground); }
+  footer.site p, footer.site a { font-size: 12px; color: var(--muted-foreground); }
+  footer.site a { text-underline-offset: 4px; }
+
+  @keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes pulse { 0%,100% { opacity:.45; transform: scale(.92);} 50% { opacity:1; transform: scale(1.06);} }
+  @media (prefers-reduced-motion: reduce) { .rise, .orb, .result { animation: none !important; opacity: 1 !important; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav class="top">
+    <span class="wordmark" style="font-size:20px;">DeBoa<i>.</i></span>
+    <!-- APP_URL -->
+    <a class="nav-link" href="https://debboa-think-ahead.lovable.app" rel="noopener">Ver demo</a>
+  </nav>
+
+  <section class="hero">
+    <div class="rise">
+      <span class="pill accent">Acesso antecipado · vagas limitadas</span>
+      <h1>Ele conhece seu momento. Por isso sabe a hora.</h1>
+      <p class="lede">
+        O DeBoa lê sua renda, seus gastos, seus cartões, suas metas e seus hábitos — e aparece
+        exatamente quando você está prestes a comprar. Não pra te impedir. Pra você decidir sabendo.
+      </p>
+
+      <div style="margin-top:2.25rem;">
+        <form class="waitlist" data-origem="hero" novalidate>
+          <div class="field-row">
+            <input class="input" type="email" name="email" required placeholder="seuemail@exemplo.com" aria-label="Seu e-mail">
+            <button class="btn btn-accent" type="submit">Garantir minha vaga
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+            </button>
+          </div>
+          <p class="hint">Vagas limitadas para o primeiro grupo. Sem spam.</p>
+        </form>
+      </div>
+
+      <div class="trust-row">
+        <span class="trust-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Sem conectar seu banco</span>
+        <span class="trust-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 4 6v6c0 4.5 3 7.5 8 9 5-1.5 8-4.5 8-9V6l-8-3Z"/><path d="m9 12 2 2 4-4"/></svg>Dados só no seu aparelho</span>
+        <span class="trust-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8Z"/></svg>Entra em 10 segundos</span>
+      </div>
+    </div>
+
+    <div class="phone rise d1">
+      <div class="phone-frame">
+        <div class="phone-screen">
+          <div class="phone-top">
+            <span class="wordmark" style="font-size:15px;">DeBoa<i>.</i></span>
+            <span class="analyzing"><span class="orb"></span>Analisando</span>
+          </div>
+          <div style="margin-top:1.75rem;">
+            <p class="phone-eyebrow">Momento de decisão</p>
+            <p class="phone-product">Apple AirPods Pro</p>
+            <p class="phone-price">R$&nbsp;1.899,00</p>
+          </div>
+          <div class="phone-bubble">
+            <p class="who">DeBoa</p>
+            <p class="say">“Ei. Faltam 3 dias pro seu salário e isso come 68% do que você tem. Eu pensaria duas vezes.”</p>
+          </div>
+          <div class="phone-actions">
+            <span class="yes">Quero entender</span>
+            <span class="no">Deixa pra lá</span>
+          </div>
+        </div>
+      </div>
+      <p class="phone-caption">Simulação baseada em um perfil de teste.</p>
+    </div>
+  </section>
+
+  <section class="block">
+    <p class="eyebrow">Por que isso importa</p>
+    <h2>As piores decisões financeiras não são caras. São no momento errado.</h2>
+    <p class="prose">
+      Você não compra errado por falta de inteligência. Compra errado porque decide sem contexto —
+      no impulso, no fim do mês, sem os dois segundos de pausa que mudariam a resposta.
+      O DeBoa existe pra ser esses dois segundos.
+    </p>
+  </section>
+
+  <section class="block">
+    <p class="eyebrow">O que o DeBoa enxerga</p>
+    <h2>Ele não olha o preço. Ele olha a sua vida financeira inteira.</h2>
+
+    <div class="mandala-grid">
+      <div class="mandala">
+        <svg viewBox="0 0 400 400" role="img" aria-label="Renda, disponível, cartões, objetivos, hábitos e timing convergindo para o DeBoa">
+          <circle cx="200" cy="200" r="142" fill="none" stroke="var(--border)" stroke-width="1" stroke-dasharray="2 7" stroke-linecap="round"/>
+          <circle cx="200" cy="200" r="96" fill="none" stroke="var(--border)" stroke-width="1"/>
+          <line x1="200" y1="138" x2="200" y2="87" stroke="var(--border)" stroke-width="1"/>
+          <line x1="253.7" y1="169" x2="297.9" y2="143.5" stroke="var(--border)" stroke-width="1"/>
+          <line x1="253.7" y1="231" x2="297.9" y2="256.5" stroke="var(--border)" stroke-width="1"/>
+          <line x1="200" y1="262" x2="200" y2="313" stroke="var(--border)" stroke-width="1"/>
+          <line x1="146.3" y1="231" x2="102.1" y2="256.5" stroke="var(--border)" stroke-width="1"/>
+          <line x1="146.3" y1="169" x2="102.1" y2="143.5" stroke="var(--border)" stroke-width="1"/>
+
+          <g><circle cx="200" cy="58" r="27" fill="var(--surface)" stroke="var(--border)" stroke-width="1"/>
+            <g transform="translate(191 49) scale(0.75)" fill="none" stroke="var(--foreground)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/></g>
+            <text x="200" y="103" text-anchor="middle" fill="var(--muted-foreground)" font-size="14" font-weight="500" letter-spacing="-0.01em">Renda</text></g>
+          <g><circle cx="323" cy="129" r="27" fill="var(--surface)" stroke="var(--border)" stroke-width="1"/>
+            <g transform="translate(314 120) scale(0.75)" fill="none" stroke="var(--foreground)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4 6v6c0 4.5 3 7.5 8 9 5-1.5 8-4.5 8-9V6l-8-3Z"/><path d="m9 12 2 2 4-4"/></g>
+            <text x="323" y="174" text-anchor="middle" fill="var(--muted-foreground)" font-size="14" font-weight="500" letter-spacing="-0.01em">Disponível</text></g>
+          <g><circle cx="323" cy="271" r="27" fill="var(--surface)" stroke="var(--border)" stroke-width="1"/>
+            <g transform="translate(314 262) scale(0.75)" fill="none" stroke="var(--foreground)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></g>
+            <text x="323" y="316" text-anchor="middle" fill="var(--muted-foreground)" font-size="14" font-weight="500" letter-spacing="-0.01em">Cartões</text></g>
+          <g><circle cx="200" cy="342" r="27" fill="var(--surface)" stroke="var(--border)" stroke-width="1"/>
+            <g transform="translate(191 333) scale(0.75)" fill="none" stroke="var(--foreground)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.2"/></g>
+            <text x="200" y="387" text-anchor="middle" fill="var(--muted-foreground)" font-size="14" font-weight="500" letter-spacing="-0.01em">Objetivos</text></g>
+          <g><circle cx="77" cy="271" r="27" fill="var(--surface)" stroke="var(--border)" stroke-width="1"/>
+            <g transform="translate(68 262) scale(0.75)" fill="none" stroke="var(--foreground)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m17 2 4 4-4 4"/><path d="M3 11v-1a4 4 0 0 1 4-4h14"/><path d="m7 22-4-4 4-4"/><path d="M21 13v1a4 4 0 0 1-4 4H3"/></g>
+            <text x="77" y="316" text-anchor="middle" fill="var(--muted-foreground)" font-size="14" font-weight="500" letter-spacing="-0.01em">Hábitos</text></g>
+          <g><circle cx="77" cy="129" r="27" fill="var(--surface)" stroke="var(--border)" stroke-width="1"/>
+            <g transform="translate(68 120) scale(0.75)" fill="none" stroke="var(--foreground)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15.5 14"/></g>
+            <text x="77" y="174" text-anchor="middle" fill="var(--muted-foreground)" font-size="14" font-weight="500" letter-spacing="-0.01em">Timing</text></g>
+
+          <circle cx="200" cy="200" r="54" fill="var(--primary)"/>
+          <text x="200" y="206" text-anchor="middle" fill="var(--primary-foreground)" font-size="19" font-weight="600" letter-spacing="-0.04em">DeBoa<tspan fill="var(--accent)">.</tspan></text>
+        </svg>
+      </div>
+
+      <dl class="legend">
+        <div><dt>Renda</dt><dd>Quanto entra e em que dia do mês.</dd></div>
+        <div><dt>Disponível</dt><dd>O que sobra depois do essencial.</dd></div>
+        <div><dt>Cartões</dt><dd>Quanto do seu futuro já está comprometido.</dd></div>
+        <div><dt>Objetivos</dt><dd>O que você está guardando, e pra quê.</dd></div>
+        <div><dt>Hábitos</dt><dd>Os gastos que se repetem sem você notar.</dd></div>
+        <div><dt>Timing</dt><dd>A dois dias do salário, ou a vinte.</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="block">
+    <p class="eyebrow">A prova</p>
+    <h2>O mesmo tênis. Dois momentos. Duas respostas.</h2>
+    <p class="prose">
+      Nada mudou no produto nem no preço. O que mudou foi o seu mês — e é exatamente isso que o
+      DeBoa lê antes de responder.
+    </p>
+
+    <div class="proof-grid">
+      <div class="card">
+        <div class="proof-head"><span class="pill">Mês apertado</span><span class="impact">Impacto Médio</span></div>
+        <dl class="proof-rows">
+          <div><dt>Tênis</dt><dd>R$&nbsp;399,00</dd></div>
+          <div><dt>Disponível no mês</dt><dd>R$&nbsp;2.800,00</dd></div>
+          <div><dt>Peso da compra</dt><dd>14%</dd></div>
+        </dl>
+        <p class="proof-verdict">Vale analisar o impacto.</p>
+        <p class="proof-advice">Eu daria 48 horas antes de confirmar.</p>
+      </div>
+      <div class="card go">
+        <div class="proof-head"><span class="pill accent">Mês folgado</span><span class="impact">Impacto Baixo</span></div>
+        <dl class="proof-rows">
+          <div><dt>Tênis</dt><dd>R$&nbsp;399,00</dd></div>
+          <div><dt>Disponível no mês</dt><dd>R$&nbsp;4.800,00</dd></div>
+          <div><dt>Peso da compra</dt><dd>8%</dd></div>
+        </dl>
+        <p class="proof-verdict">Pode fazer sentido.</p>
+        <p class="proof-advice">Essa compra parece tranquila. Segue.</p>
+      </div>
+    </div>
+    <p class="footnote">Ambas as respostas foram geradas pelo mesmo motor de decisão que roda no produto.</p>
+  </section>
+
+  <section class="block">
+    <p class="eyebrow">Como funciona</p>
+    <ol class="steps">
+      <li><span class="num">01</span><p class="t">Você conta seu contexto</p><p class="d">Renda, gastos, cartões, metas e hábitos. Uma vez, em etapas curtas.</p></li>
+      <li><span class="num">02</span><p class="t">O DeBoa detecta o momento</p><p class="d">Você está prestes a comprar algo. Ele percebe antes do clique.</p></li>
+      <li><span class="num">03</span><p class="t">Cruza tudo com o seu agora</p><p class="d">A mesma compra pesa diferente no dia 5 e no dia 28.</p></li>
+      <li><span class="num">04</span><p class="t">Recomenda. Você decide</p><p class="d">Ele nunca bloqueia nada. A decisão final é sempre sua.</p></li>
+    </ol>
+  </section>
+
+  <section class="block">
+    <p class="eyebrow">Experimente agora, sem cadastro</p>
+    <h2>Antes de entrar na lista, veja o DeBoa pensando.</h2>
+    <div class="card lift" style="margin-top:2rem;">
+      <p style="font-size:14px; line-height:1.6; color:var(--muted-foreground);">
+        Isto roda com um perfil de teste de R$&nbsp;2.800,00 disponíveis. A sua versão vai usar o
+        seu contexto real.
+      </p>
+      <form id="demo-form" style="margin-top:1.25rem;">
+        <div class="demo-row">
+          <input id="demo-name" class="input" type="text" placeholder="O que você quer comprar?" aria-label="O que você quer comprar" style="background:var(--background);">
+          <input id="demo-price" class="input" type="text" inputmode="decimal" placeholder="Preço (R$)" aria-label="Preço" style="background:var(--background);">
+        </div>
+        <button class="btn btn-primary" type="submit" style="margin-top:0.75rem;">DeBoa, analise isso</button>
+      </form>
+      <div id="demo-result"></div>
+    </div>
+  </section>
+
+  <section class="block">
+    <p class="eyebrow">Por que estamos construindo isso</p>
+    <div style="margin-top:1.5rem; max-width:62ch; display:flex; flex-direction:column; gap:1rem;">
+      <p style="font-size:16px; line-height:1.7;">
+        Não queremos criar mais um app de finanças. Queremos provar que um agente pode aparecer no
+        momento certo — antes da decisão, não depois do extrato — e ajudar você a decidir com mais
+        contexto.
+      </p>
+      <p style="font-size:16px; line-height:1.7; color:var(--muted-foreground);">
+        Estamos testando essa ideia com um grupo pequeno antes de abrir pra todo mundo. Se isso faz
+        sentido pra você, queremos muito ter você nesse grupo.
+      </p>
+    </div>
+    <p style="margin-top:1.25rem; font-size:13px; font-weight:500; color:var(--muted-foreground);">— Equipe DeBoa</p>
+  </section>
+
+  <section class="block">
+    <p class="eyebrow">O que o DeBoa não é</p>
+    <div class="not-grid" style="margin-top:1rem;">
+      <div>
+        <h2 style="margin-top:0;">Não é mais um app de finanças.</h2>
+        <ul class="not-list">
+          <li>Dashboard cheio de gráficos</li>
+          <li>Planilha de orçamento</li>
+          <li>Dezenas de categorias de gasto</li>
+          <li>Mais um app de banco digital</li>
+        </ul>
+      </div>
+      <div class="card quote-card lift">
+        <p class="big">Você decide.<br>O DeBoa pensa com você<i>.</i></p>
+        <p class="small">Ele não decide por você. Ele te ajuda a enxergar melhor antes de decidir.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="block">
+    <p class="eyebrow">Perguntas frequentes</p>
+    <div class="faq">
+      <details><summary>Preciso conectar minha conta bancária?<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></summary><p class="answer">Não. Nesta fase de testes você mesmo conta ao DeBoa como sua vida financeira funciona. Nenhuma integração bancária é feita.</p></details>
+      <details><summary>Isso substitui meu banco ou meu app de finanças?<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></summary><p class="answer">Não. O DeBoa não guarda seu dinheiro nem controla seus gastos. Ele só te ajuda a pensar melhor antes de uma decisão.</p></details>
+      <details><summary>Meus dados ficam seguros?<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></summary><p class="answer">Nesta fase, tudo fica salvo apenas no seu aparelho. Não enviamos suas informações financeiras para nenhum servidor.</p></details>
+      <details><summary>Quando o DeBoa lança de verdade?<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></summary><p class="answer">Estamos abrindo em grupos pequenos, começando pelas pessoas da lista de espera. Quem entra agora tem prioridade.</p></details>
+      <details><summary>Vai ser pago?<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></summary><p class="answer">Ainda estamos definindo o modelo. Quem participar do primeiro grupo terá condições especiais de lançamento.</p></details>
+      <details><summary>Funciona no meu iPhone?<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></summary><p class="answer">Sim. O DeBoa foi desenhado mobile-first, com prioridade absoluta para o Safari do iPhone.</p></details>
+    </div>
+  </section>
+
+  <section class="final">
+    <div class="card lift">
+      <p class="big">Antes de decidir, pergunte ao DeBoa<i>.</i></p>
+      <p class="sub">Vagas limitadas para o primeiro grupo. Quem entra agora tem prioridade de acesso e condições especiais de lançamento.</p>
+      <div class="form-slot">
+        <form class="waitlist" data-origem="cta-final" novalidate>
+          <div class="field-row">
+            <input class="input" type="email" name="email" required placeholder="seuemail@exemplo.com" aria-label="Seu e-mail">
+            <button class="btn btn-accent" type="submit">Garantir minha vaga
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+            </button>
+          </div>
+          <p class="hint">Vagas limitadas para o primeiro grupo. Sem spam.</p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site">
+    <span class="wordmark">DeBoa<i>.</i></span>
+    <p>© 2026 DeBoa. Um experimento em decisões melhores.</p>
+    <!-- APP_URL -->
+    <a href="https://debboa-think-ahead.lovable.app" rel="noopener">Ver a demo do produto</a>
+  </footer>
+</div>
+
+<script>
+(function () {
+  /* ══════════════════════════════════════════════════════════════════════
+     ONDE OS LEADS SÃO ENTREGUES
+
+     Os cadastros vão para a tabela `leads` no Supabase. A chave abaixo é a
+     `anon`, pública por design — ela só é segura porque as policies de RLS
+     permitem INSERT e proíbem SELECT. Ver landing/supabase.sql.
+
+     Nunca troque por uma chave `service_role` aqui: ela ignora RLS e ficaria
+     exposta a qualquer visitante.
+     ══════════════════════════════════════════════════════════════════════ */
+  var SUPABASE_URL = "https://hmasenjcnpajirpeushg.supabase.co";
+  var SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhtYXNlbmpjbnBhamlycGV1c2hnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODczNjI2MjYsImV4cCI6MjEwMjkzODYyNn0.b6ZgcBP3DuFab1AI9Vh37-jVqUN8zQEwrtrtTOw9U4s";
+  var LEADS_TABLE = "leads";
+
+  var isEmail = function (v) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); };
+
+  function storeLocally(email) {
+    try {
+      var k = "deboa.leads";
+      var leads = JSON.parse(window.localStorage.getItem(k) || "[]");
+      if (!leads.some(function (l) { return l.email.toLowerCase() === email.toLowerCase(); })) {
+        leads.push({ email: email, at: new Date().toISOString() });
+        window.localStorage.setItem(k, JSON.stringify(leads));
+      }
+    } catch (e) { /* storage unavailable */ }
+  }
+
+  /* Resolves when the lead is safely recorded, rejects when it is not — the
+     form shows an error on rejection rather than a false confirmation, so a
+     broken integration surfaces immediately instead of dropping signups. */
+  function submitLead(email, origem) {
+    storeLocally(email);
+    return fetch(SUPABASE_URL + "/rest/v1/" + LEADS_TABLE, {
+      method: "POST",
+      headers: {
+        apikey: SUPABASE_ANON_KEY,
+        Authorization: "Bearer " + SUPABASE_ANON_KEY,
+        "Content-Type": "application/json",
+        Prefer: "return=minimal"
+      },
+      body: JSON.stringify({ email: email, origem: origem || "landing-page" })
+    }).then(function (res) {
+      // 409 = e-mail já cadastrado (unique). Para quem preencheu, é sucesso.
+      if (res.ok || res.status === 409) return;
+      return res.text().then(function (body) {
+        throw new Error("Supabase " + res.status + ": " + body);
+      });
+    });
+  }
+
+  function shareBtn(dark, copied) {
+    return '<button type="button" class="btn btn-quiet' + (dark ? " on-dark" : "") + '" data-share>' +
+      '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/></svg>' +
+      (copied ? "Link copiado!" : "Chamar um amigo pra entrar também") + "</button>";
+  }
+
+  function wireShare(box, dark) {
+    var btn = box.querySelector("[data-share]");
+    if (!btn) return;
+    btn.addEventListener("click", async function () {
+      var data = {
+        title: "DeBoa",
+        text: "Entrei na lista do DeBoa, um agente que ajuda a decidir a hora certa de comprar. Bora junto?",
+        url: window.location.href
+      };
+      if (navigator.share) { try { await navigator.share(data); return; } catch (e) {} }
+      try {
+        await navigator.clipboard.writeText(data.url);
+        box.innerHTML = box.querySelector(".success-row").outerHTML + shareBtn(dark, true);
+        wireShare(box, dark);
+      } catch (e) {}
+    });
+  }
+
+  function wireForm(form, dark) {
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var input = form.querySelector(".input");
+      var hint = form.querySelector(".hint");
+      var btn = form.querySelector('button[type="submit"]');
+      var v = input.value.trim();
+
+      if (!isEmail(v)) {
+        input.classList.add("is-error");
+        hint.textContent = "Digite um e-mail válido para entrar na lista.";
+        hint.classList.add("error");
+        input.focus();
+        return;
+      }
+
+      btn.disabled = true;
+      var original = btn.innerHTML;
+      btn.textContent = "Enviando…";
+
+      submitLead(v, form.dataset.origem).then(
+        function () {
+          var box = document.createElement("div");
+          box.className = "success-stack";
+          box.innerHTML =
+            '<div class="success-row' + (dark ? " on-dark" : "") + '">' +
+            '<span class="check"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></span>' +
+            "<p>Você está na lista. Avisamos assim que abrir.</p></div>" + shareBtn(dark, false);
+          form.replaceWith(box);
+          wireShare(box, dark);
+        },
+        function (err) {
+          console.error(err);
+          btn.disabled = false;
+          btn.innerHTML = original;
+          hint.textContent = "Não consegui salvar agora. Tenta de novo em instantes?";
+          hint.classList.add("error");
+        }
+      );
+    });
+
+    form.querySelector(".input").addEventListener("input", function () {
+      this.classList.remove("is-error");
+      var hint = form.querySelector(".hint");
+      hint.textContent = "Vagas limitadas para o primeiro grupo. Sem spam.";
+      hint.classList.remove("error");
+    });
+  }
+
+  document.querySelectorAll("form.waitlist").forEach(function (f) { wireForm(f, false); });
+
+  /* Mirrors the app's src/services/decisionEngine.ts against the test
+     profile in src/data/seed.ts (disponível R$ 2.800). Keep both in sync. */
+  function evaluate(price) {
+    var share = price / 2800;
+    if (share > 0.3) return { impact: "Alto", headline: "Eu pensaria duas vezes.", message: "Pelo seu momento financeiro atual, essa compra pode comprometer uma parte relevante do dinheiro que você reservou para seus próximos objetivos.", advice: "Eu esperaria 7 dias antes de comprar." };
+    if (share >= 0.1) return { impact: "Médio", headline: "Vale analisar o impacto.", message: "Você consegue comprar. A pergunta é: deveria agora? Essa decisão mexe com uma fatia média do que você tem disponível.", advice: "Eu daria 48 horas antes de confirmar." };
+    return { impact: "Baixo", headline: "Pode fazer sentido.", message: "Essa decisão parece compatível com o seu contexto de teste.", advice: "Essa compra parece tranquila. Segue." };
+  }
+
+  document.getElementById("demo-form").addEventListener("submit", function (e) {
+    e.preventDefault();
+    var raw = document.getElementById("demo-price").value;
+    var price = Number(raw.replace(/\./g, "").replace(",", "."));
+    if (!(price > 0)) { document.getElementById("demo-price").focus(); return; }
+    var d = evaluate(price);
+    var el = document.getElementById("demo-result");
+    el.innerHTML =
+      '<div class="result">' +
+      '<div class="result-head"><span>DeBoa responde</span><span class="imp">Impacto ' + d.impact + "</span></div>" +
+      "<h3>" + d.headline + "</h3>" +
+      '<p class="msg">' + d.message + "</p>" +
+      '<p class="adv">' + d.advice + "</p>" +
+      '<div class="result-nudge"><p>Isso foi só com um perfil genérico. Com o seu contexto real, essa resposta é sobre a <strong>sua</strong> vida.</p>' +
+      '<div style="margin-top:1rem;"><form class="waitlist" data-origem="demo" novalidate>' +
+      '<div class="field-row">' +
+      '<input class="input on-dark" type="email" name="email" required placeholder="seuemail@exemplo.com" aria-label="Seu e-mail">' +
+      '<button class="btn btn-accent" type="submit">Garantir minha vaga<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></button>' +
+      '</div><p class="hint on-dark">Vagas limitadas para o primeiro grupo. Sem spam.</p>' +
+      "</form></div></div></div>";
+    wireForm(el.querySelector("form.waitlist"), true);
+  });
+})();
+</script>
+</body>
+</html>
