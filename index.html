@@ -240,6 +240,58 @@
   @keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
   @keyframes pulse { 0%,100% { opacity:.45; transform: scale(.92);} 50% { opacity:1; transform: scale(1.06);} }
   @media (prefers-reduced-motion: reduce) { .rise, .orb, .result { animation: none !important; opacity: 1 !important; } }
+
+  /* ── Real product screenshots ─────────────────────────────────────────── */
+  .shot { width: 100%; }
+  .shot .frame {
+    border-radius: 2.2rem; border: 1px solid var(--border); background: var(--surface);
+    padding: 0.5rem; box-shadow: var(--shadow-lift);
+  }
+  .shot img { display: block; width: 100%; height: auto; border-radius: 1.8rem; background: var(--background); }
+  .shot figcaption { margin-top: 0.9rem; padding: 0 0.25rem; }
+  .shot figcaption .t { font-size: 15px; font-weight: 500; letter-spacing: -0.02em; line-height: 1.35; }
+  .shot figcaption .d { margin-top: 0.3rem; font-size: 13px; line-height: 1.55; color: var(--muted-foreground); }
+
+  /* On a phone the tour swipes; on a wide screen it lays out flat. */
+  .tour {
+    margin-top: 2rem; display: grid; grid-auto-flow: column; grid-auto-columns: 78%;
+    gap: 1.25rem; overflow-x: auto; scroll-snap-type: x mandatory;
+    padding-bottom: 0.5rem; margin-left: -1.5rem; margin-right: -1.5rem;
+    padding-left: 1.5rem; padding-right: 1.5rem; scrollbar-width: none;
+  }
+  .tour::-webkit-scrollbar { display: none; }
+  .tour > * { scroll-snap-align: start; }
+  @media (min-width: 700px) {
+    .tour {
+      grid-auto-flow: row; grid-template-columns: repeat(4, 1fr); grid-auto-columns: auto;
+      overflow: visible; margin-left: 0; margin-right: 0; padding-left: 0; padding-right: 0;
+      align-items: start; gap: 1.5rem;
+    }
+  }
+  .swipe-hint { margin-top: 0.75rem; font-size: 12px; color: var(--muted-foreground); }
+  @media (min-width: 700px) { .swipe-hint { display: none; } }
+
+  /* ── What happens after signing up ────────────────────────────────────── */
+  .after { margin-top: 2rem; display: grid; gap: 0.75rem; }
+  @media (min-width: 700px) { .after { grid-template-columns: repeat(3, 1fr); } }
+  .after li { display: flex; gap: 0.85rem; border-radius: var(--r-2xl); border: 1px solid var(--border); background: var(--surface); padding: 1.1rem 1.15rem; }
+  .after .n { display: grid; place-items: center; flex-shrink: 0; width: 1.75rem; height: 1.75rem; border-radius: 999px; background: var(--accent); color: var(--accent-foreground); font-size: 12px; font-weight: 600; }
+  .after .t { font-size: 14px; font-weight: 500; letter-spacing: -0.01em; }
+  .after .d { margin-top: 0.25rem; font-size: 13px; line-height: 1.55; color: var(--muted-foreground); }
+
+  /* ── Sticky call to action, phones only ───────────────────────────────── */
+  .sticky-cta {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 60;
+    padding: 0.75rem 1rem calc(0.75rem + env(safe-area-inset-bottom));
+    background: oklch(0.985 0.004 85 / 88%); backdrop-filter: blur(14px);
+    border-top: 1px solid var(--border);
+    transform: translateY(110%); transition: transform .28s cubic-bezier(.16,1,.3,1);
+  }
+  .sticky-cta.show { transform: translateY(0); }
+  .sticky-cta .btn { width: 100%; }
+  @media (min-width: 700px) { .sticky-cta { display: none; } }
+  body.has-sticky { padding-bottom: 4.5rem; }
+  @media (min-width: 700px) { body.has-sticky { padding-bottom: 0; } }
 </style>
 </head>
 <body>
@@ -247,7 +299,7 @@
   <nav class="top">
     <span class="wordmark" style="font-size:20px;">DeBoa<i>.</i></span>
     <!-- APP_URL -->
-    <a class="nav-link" href="https://debboa-think-ahead.lovable.app" rel="noopener">Ver demo</a>
+    <a class="nav-link" href="https://danielfrancafatecsplabs.github.io/deboa-app/" rel="noopener">Abrir o app</a>
   </nav>
 
   <section class="hero">
@@ -257,6 +309,7 @@
       <p class="lede">
         O DeBoa lê sua renda, seus gastos, seus cartões, suas metas e seus hábitos — e aparece
         exatamente quando você está prestes a comprar. Não pra te impedir. Pra você decidir sabendo.
+        <strong style="color:var(--foreground); font-weight:500;">São quatro perguntas para começar.</strong>
       </p>
 
       <div style="margin-top:2.25rem;">
@@ -278,30 +331,15 @@
       </div>
     </div>
 
-    <div class="phone rise d1">
-      <div class="phone-frame">
-        <div class="phone-screen">
-          <div class="phone-top">
-            <span class="wordmark" style="font-size:15px;">DeBoa<i>.</i></span>
-            <span class="analyzing"><span class="orb"></span>Analisando</span>
-          </div>
-          <div style="margin-top:1.75rem;">
-            <p class="phone-eyebrow">Momento de decisão</p>
-            <p class="phone-product">Apple AirPods Pro</p>
-            <p class="phone-price">R$&nbsp;1.899,00</p>
-          </div>
-          <div class="phone-bubble">
-            <p class="who">DeBoa</p>
-            <p class="say">“Ei. Faltam 3 dias pro seu salário e isso come 68% do que você tem. Eu pensaria duas vezes.”</p>
-          </div>
-          <div class="phone-actions">
-            <span class="yes">Quero entender</span>
-            <span class="no">Deixa pra lá</span>
-          </div>
-        </div>
+    <figure class="phone shot rise d1" style="max-width:320px;">
+      <div class="frame">
+        <img src="shots/intervencao.png" width="780" height="1780"
+             alt="Tela do DeBoa perguntando se vale a pena comprar um tênis de R$ 899, listando que faltam R$ 6.900 para a viagem e 12 dias até o próximo recebimento.">
       </div>
-      <p class="phone-caption">Simulação baseada em um perfil de teste.</p>
-    </div>
+      <figcaption>
+        <p class="d" style="text-align:center;">Tela real do app, com um perfil de exemplo.</p>
+      </figcaption>
+    </figure>
   </section>
 
   <section class="block">
@@ -312,6 +350,63 @@
       no impulso, no fim do mês, sem os dois segundos de pausa que mudariam a resposta.
       O DeBoa existe pra ser esses dois segundos.
     </p>
+  </section>
+
+
+  <section class="block">
+    <p class="eyebrow">Por dentro do produto</p>
+    <h2>Não é um conceito. Está funcionando.</h2>
+    <p class="prose">
+      Estas são telas do DeBoa rodando, com um perfil de exemplo: renda de R$&nbsp;5.200,
+      R$&nbsp;2.800 disponíveis, uma fatura de R$&nbsp;1.240 e uma viagem para juntar.
+    </p>
+
+    <div class="tour">
+      <figure class="shot">
+        <div class="frame">
+          <img src="shots/perguntas.png" width="780" height="1600" loading="lazy" decoding="async"
+               alt="Primeira pergunta do Mapa Financeiro: quanto entra na sua conta por mês.">
+        </div>
+        <figcaption>
+          <p class="t">Quatro perguntas. Só isso.</p>
+          <p class="d">Sem planilha, sem cinquenta campos. Depois da quarta, ele já consegue te ajudar a decidir.</p>
+        </figcaption>
+      </figure>
+
+      <figure class="shot">
+        <div class="frame">
+          <img src="shots/mapa.png" width="780" height="1600" loading="lazy" decoding="async"
+               alt="Mapa Financeiro do DeBoa mostrando renda líquida, faturas, reserva e o estado do mês como Atenção.">
+        </div>
+        <figcaption>
+          <p class="t">Ele devolve uma leitura.</p>
+          <p class="d">Não um dashboard para você interpretar. Uma frase sobre o seu mês, em português.</p>
+        </figcaption>
+      </figure>
+
+      <figure class="shot">
+        <div class="frame">
+          <img src="shots/insights.png" width="780" height="1600" loading="lazy" decoding="async"
+               alt="O DeBoa aponta que o maior potencial de economia está em delivery, cerca de R$ 831 por mês.">
+        </div>
+        <figcaption>
+          <p class="t">E percebe o que você não percebeu.</p>
+          <p class="d">“Seu maior potencial de economia parece estar em delivery: cerca de R$&nbsp;831 por mês.”</p>
+        </figcaption>
+      </figure>
+
+      <figure class="shot">
+        <div class="frame">
+          <img src="shots/analise.png" width="780" height="1770" loading="lazy" decoding="async"
+               alt="Análise do DeBoa recomendando esperar 7 dias antes de comprar, com os motivos listados.">
+        </div>
+        <figcaption>
+          <p class="t">Na hora da compra, ele mostra a conta.</p>
+          <p class="d">Cada motivo, o impacto, a recomendação e o quanto ele confia nela. Você decide sabendo.</p>
+        </figcaption>
+      </figure>
+    </div>
+    <p class="swipe-hint">← arraste para ver as quatro telas</p>
   </section>
 
   <section class="block">
@@ -474,7 +569,18 @@
     </div>
   </section>
 
-  <section class="final">
+
+  <section class="block">
+    <p class="eyebrow">Sem letra miúda</p>
+    <h2>O que acontece depois que você entra.</h2>
+    <ol class="after">
+      <li><span class="n">1</span><div><p class="t">Você recebe um e-mail</p><p class="d">Confirmando sua vaga. Um só — não é lista de newsletter.</p></div></li>
+      <li><span class="n">2</span><div><p class="t">Chamamos por grupos</p><p class="d">Poucas pessoas por vez, na ordem de entrada, para conseguirmos ouvir cada uma.</p></div></li>
+      <li><span class="n">3</span><div><p class="t">Você usa e nos diz</p><p class="d">Sem cartão, sem instalar nada. Abre no navegador do seu celular.</p></div></li>
+    </ol>
+  </section>
+
+  <section class="final" id="entrar">
     <div class="card lift">
       <p class="big">Antes de decidir, pergunte ao DeBoa<i>.</i></p>
       <p class="sub">Vagas limitadas para o primeiro grupo. Quem entra agora tem prioridade de acesso e condições especiais de lançamento.</p>
@@ -496,8 +602,14 @@
     <span class="wordmark">DeBoa<i>.</i></span>
     <p>© 2026 DeBoa. Um experimento em decisões melhores.</p>
     <!-- APP_URL -->
-    <a href="https://debboa-think-ahead.lovable.app" rel="noopener">Ver a demo do produto</a>
+    <a href="https://danielfrancafatecsplabs.github.io/deboa-app/" rel="noopener">Abrir o app</a>
   </footer>
+</div>
+
+<div class="sticky-cta" id="sticky-cta" aria-hidden="true">
+  <a class="btn btn-accent" href="#entrar">Garantir minha vaga
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+  </a>
 </div>
 
 <script>
@@ -606,6 +718,8 @@
             "<p>Você está na lista. Avisamos assim que abrir.</p></div>" + shareBtn(dark, false);
           form.replaceWith(box);
           wireShare(box, dark);
+          joined = true;
+          hideSticky();
         },
         function (err) {
           console.error(err);
@@ -622,6 +736,60 @@
       var hint = form.querySelector(".hint");
       hint.textContent = "Vagas limitadas para o primeiro grupo. Sem spam.";
       hint.classList.remove("error");
+    });
+  }
+
+
+  /* ── Sticky call to action, phones only ─────────────────────────────────
+     The page is long and the two forms sit at its ends, so on a phone the
+     ask is off screen for most of the scroll. The bar appears once the hero
+     form is gone, steps aside when the final form is in view so it never
+     covers the thing it points at, and stops entirely once someone joined. */
+  var joined = false;
+  var stickyEl = document.getElementById("sticky-cta");
+
+  function hideSticky() {
+    if (!stickyEl) return;
+    stickyEl.classList.remove("show");
+    stickyEl.setAttribute("aria-hidden", "true");
+    document.body.classList.remove("has-sticky");
+  }
+
+  if (stickyEl && "IntersectionObserver" in window) {
+    var heroForm = document.querySelector(".hero form.waitlist");
+    var finalSection = document.getElementById("entrar");
+    var heroVisible = true;
+    var finalVisible = false;
+
+    var sync = function () {
+      var want = !joined && !heroVisible && !finalVisible;
+      stickyEl.classList.toggle("show", want);
+      stickyEl.setAttribute("aria-hidden", want ? "false" : "true");
+      document.body.classList.toggle("has-sticky", want);
+    };
+
+    if (heroForm) {
+      new IntersectionObserver(function (entries) {
+        heroVisible = entries[0].isIntersecting;
+        sync();
+      }).observe(heroForm);
+    } else {
+      heroVisible = false;
+    }
+
+    if (finalSection) {
+      new IntersectionObserver(function (entries) {
+        finalVisible = entries[0].isIntersecting;
+        sync();
+      }, { rootMargin: "0px 0px -20% 0px" }).observe(finalSection);
+    }
+
+    stickyEl.addEventListener("click", function () {
+      // Land on the form with the field ready, not just near it.
+      window.setTimeout(function () {
+        var input = finalSection && finalSection.querySelector("input[type=email]");
+        if (input) input.focus({ preventScroll: true });
+      }, 600);
     });
   }
 
